@@ -4,6 +4,7 @@ import 'package:market_news/services/news_api.dart';
 import 'package:market_news/widgets.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -22,56 +23,77 @@ class MyApp extends StatelessWidget {
           primary: Colors.grey.shade700
         )
       ),
-      home: Scaffold(
+      home: const App()
+    );
+  }
+}
 
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(56 + 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TodayDateChip()
-                  ],
-                ),
-              ),
-            ],
-          )
-        ),
-      
-        body: FutureBuilder(
-          // future: Future(() => [NewsItem(id: 1, title: 'Test', impact: Impact.high, timeType: TimeType.time, date: DateTime.now(), currency: Currency.eur)]),
-          future: NewsApi.today(),
-          builder: (context, snapshot) {
-            if(snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
-            if(snapshot.hasError) {
-              return SingleChildScrollView(child: Text('Error: ${snapshot.error}\n${snapshot.stackTrace}'));
-            }
-            return SingleChildScrollView(
-              child: Column(
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56 + 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 32,
-                    height: MediaQuery.of(context).size.width - 32,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(55 - 32),
-                      border: Border.all(color: Colors.grey.shade800, width: 1.5)
-                    ),
-                    child: const Filters()
-                  )
-                ]
+                  Button('${DateTime.now().day} ${monthToString(DateTime.now().month)}', filled: false),
+                  Button(
+                    'Filters',
+                    icon: Icons.tune,
+                    filled: false,
+                    onTap: () async {
+                      await showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => Filters(onCancel: () => Navigator.pop(context), onApply: (pastEvents, impacts, currencies) {print(pastEvents);})
+                      );
+                    },
+                  ),
+                ],
               ),
-            );
-          }
-        ),
-      
+            ),
+          ],
+        )
       ),
+    
+      body: FutureBuilder(
+        // future: Future(() => [NewsItem(id: 1, title: 'Test', impact: Impact.high, timeType: TimeType.time, date: DateTime.now(), currency: Currency.eur)]),
+        future: NewsApi.today(),
+        builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if(snapshot.hasError) {
+            return SingleChildScrollView(child: Text('Error: ${snapshot.error}\n${snapshot.stackTrace}'));
+          }
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
+                // Container(
+                //   width: MediaQuery.of(context).size.width - 32,
+                //   height: MediaQuery.of(context).size.width - 32,
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(55 - 32),
+                //     border: Border.all(color: Colors.grey.shade800, width: 1.5)
+                //   ),
+                //   child: const Filters()
+                // )
+              ]
+            ),
+          );
+        }
+      ),
+    
     );
   }
 }

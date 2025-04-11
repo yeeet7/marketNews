@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:market_news/main.dart';
 import 'package:market_news/services/news_api.dart';
 
 class NewsItemListTile extends StatelessWidget {
@@ -21,7 +20,9 @@ class NewsItemListTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all()
+        border: Border.symmetric(
+          horizontal  : BorderSide(color: Theme.of(context).colorScheme.primary, width: .125)
+        )
       ),
       // color: Colors.red.withOpacity(0.25),
       width: MediaQuery.of(context).size.width,
@@ -87,33 +88,11 @@ class NewsItemListTile extends StatelessWidget {
   }
 }
 
-class TodayDateChip extends StatelessWidget {
-  const TodayDateChip({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      // margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.grey[800]!,
-          width: 1,
-        ),
-      ),
-      child: Text('${DateTime.now().day} ${monthToString(DateTime.now().month)}',
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.grey[800],
-        ),
-      ),
-    );
-  }
-}
-
 class Filters extends StatefulWidget {
-  const Filters({super.key});
+  const Filters({required this.onApply, required this.onCancel, super.key});
+
+  final void Function(bool pastEvents, List<bool> impacts, List<bool> currencies) onApply;
+  final VoidCallback onCancel;
 
   @override
   State<Filters> createState() => _FiltersState();
@@ -122,21 +101,22 @@ class Filters extends StatefulWidget {
 class _FiltersState extends State<Filters> {
 
   bool _pastEvents = true;
-
-  bool _low = true;
-  bool _medium = true;
-  bool _high = true;
-
+  final List<bool> _impacts = List.generate(Impact.values.length, (index) => true);
   final List<bool> _currencies = List.generate(Currency.values.length, (index) => true);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8),
-      color: Theme.of(context).scaffoldBackgroundColor,
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: BorderRadius.circular(55 - 32),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text('  Past Events', style: TextStyle(color: Colors.grey[800], fontSize: 18, fontWeight: FontWeight.bold)),
           Row(
@@ -151,9 +131,9 @@ class _FiltersState extends State<Filters> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Flexible(flex: 1, child: Toggle(text: 'Low', color: Colors.green, isSelected: _low, onTap: () {_low = !_low; setState(() {});})),
-              Flexible(flex: 1, child: Toggle(text: 'Medium', color: Colors.orange.shade400, isSelected: _medium, onTap: () {_medium = !_medium; setState(() {});})),
-              Flexible(flex: 1, child: Toggle(text: 'High', color: Colors.red, isSelected: _high, onTap: () {_high = !_high; setState(() {});})),
+              Flexible(flex: 1, child: Toggle(text: 'Low', color: Colors.green, isSelected: _impacts[Impact.low.index], onTap: () {_impacts[Impact.low.index] = !_impacts[Impact.low.index]; setState(() {});})),
+              Flexible(flex: 1, child: Toggle(text: 'Medium', color: Colors.orange.shade400, isSelected: _impacts[Impact.medium.index], onTap: () {_impacts[Impact.medium.index] = !_impacts[Impact.medium.index]; setState(() {});})),
+              Flexible(flex: 1, child: Toggle(text: 'High', color: Colors.red, isSelected: _impacts[Impact.high.index], onTap: () {_impacts[Impact.high.index] = !_impacts[Impact.high.index]; setState(() {});})),
             ],
           ),
           const SizedBox(height: 16),
@@ -166,6 +146,7 @@ class _FiltersState extends State<Filters> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(Currency.values.length ~/ 2, (index) => Flexible(flex: 1, child: Button(Currency.values[index + 3].name.toUpperCase(), filled: _currencies[index + 3], onTap: () {_currencies[index + 3] = !_currencies[index + 3]; setState(() {});}))),
           ),
+          Flexible(flex: 1, child: Button('text: \'High\', isSelected: _high', onTap: () => widget.onApply(_pastEvents, _impacts, _currencies),)),
         ],
       ),
     );
@@ -228,8 +209,8 @@ class Button extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: filled ? Theme.of(context).primaryColor.withOpacity(.25) : Theme.of(context).primaryColor.withOpacity(0),
-          border: filled ? null : Border.all(
-            color: Theme.of(context).colorScheme.primary,
+          border: Border.all(
+            color: filled ? Theme.of(context).colorScheme.primary.withOpacity(0) : Theme.of(context).colorScheme.primary,
             strokeAlign: BorderSide.strokeAlignInside,
             width: 1,
           ),
