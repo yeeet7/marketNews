@@ -243,15 +243,16 @@ class DateText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor.withOpacity(.25),
+        color: highlight ? Theme.of(context).primaryColor.withOpacity(.25) : Theme.of(context).colorScheme.primary.withOpacity(0),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text('${dayToString(date.weekday)} - ${date.day} ${monthToString(date.month)} ${date.year}',
-        style: TextStyle(color: Theme.of(context).primaryColor)
+        style: highlight ? TextStyle(color: Theme.of(context).primaryColor) : null
       )
     );
   }
