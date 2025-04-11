@@ -98,6 +98,7 @@ class App extends StatelessWidget {
           return SingleChildScrollView(
             child: Column(
               children: [
+                DateText(DateTime.now(), true),
                 ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
                 // Container(
                 //   width: MediaQuery.of(context).size.width - 32,
@@ -132,6 +133,19 @@ String monthToString(int month) {
     case 10: return 'Oct';
     case 11: return 'Nov';
     case 12: return 'Dec';
+    default: return '';
+  }
+}
+
+String dayToString(int day) {
+  switch(day) {
+    case 1: return 'Monday';
+    case 2: return 'Tuesday';
+    case 3: return 'Wednesday';
+    case 4: return 'Thursday';
+    case 5: return 'Friday';
+    case 6: return 'Saturday';
+    case 7: return 'Sunday';
     default: return '';
   }
 }

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:market_news/main.dart';
 import 'package:market_news/services/news_api.dart';
 
 class NewsItemListTile extends StatelessWidget {
@@ -230,6 +231,28 @@ class Button extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class DateText extends StatelessWidget {
+  const DateText(this.date, this.highlight, {super.key});
+
+  final DateTime date;
+  final bool highlight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor.withOpacity(.25),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text('${dayToString(date.weekday)} - ${date.day} ${monthToString(date.month)} ${date.year}',
+        style: TextStyle(color: Theme.of(context).primaryColor)
+      )
     );
   }
 }
