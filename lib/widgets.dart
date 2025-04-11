@@ -30,20 +30,20 @@ class NewsItemListTile extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Flexible(
-            flex: 2,
+            flex: 3,
             fit: FlexFit.tight,
             child: Center(
               child: Text(timeType == TimeType.time ? '${date.hour}:${date.minute.toString().padLeft(2, '0')}' : timeType == TimeType.tentative ? 'Tentative' : 'All Day',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey,
+                  color: DateTime.now().isAfter(date) ? Colors.grey[800] : Colors.grey.shade400,
                 ),
               ),
             ),
           ),
           Flexible(flex: 3, fit: FlexFit.tight, child: Center(child: Text('$currencyFlag ${currency.name.toUpperCase()}', style: const TextStyle(fontSize: 16)))),
           Flexible(
-            flex: 5,
+            flex: 7,
             fit: FlexFit.tight,
             child: Text(
               title,
@@ -55,7 +55,7 @@ class NewsItemListTile extends StatelessWidget {
             ),
           ),
           Flexible(
-            flex: 3,
+            flex: 5,
             fit: FlexFit.tight,
             child: Center(
               child: Container(

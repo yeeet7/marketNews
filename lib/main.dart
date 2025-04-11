@@ -22,12 +22,12 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
 
         appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(56),
+          preferredSize: Size.fromHeight(56 + 16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -52,9 +52,7 @@ class MyApp extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  const Padding(padding: EdgeInsets.only(top: 8, left: 8, right: 8), child: Divider(),),
-                  ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
-                ]
+                  ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),                ]
               ),
             );
           }
