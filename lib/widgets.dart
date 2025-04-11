@@ -111,7 +111,7 @@ class _FiltersState extends State<Filters> {
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(55),
+        borderRadius: BorderRadius.circular(55 - 16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
