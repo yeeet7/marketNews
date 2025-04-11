@@ -76,19 +76,29 @@ abstract class NewsApi {
       
       // Parse time and convert to 24-hour format
       String timeString = item.find('', selector: 'td.calendar__time')!.text.trim();
-      timeString.isEmpty ? timeString = lastDate : lastDate = timeString;
-      final timeParts = RegExp(r'(\d+):(\d+)(am|pm)').firstMatch(timeString);
-      final hour = int.parse(timeParts!.group(1)!);
-      final minute = int.parse(timeParts.group(2)!);
-      final period = timeParts.group(3)!;
+      late TimeType timeType;
 
-      final hour24 = (period == 'pm' && hour != 12) ? hour + 12 : (period == 'am' && hour == 12) ? 0 : hour;
-      DateTime date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, hour24, minute);
+      timeString.isEmpty ? timeString = lastDate : lastDate = timeString;
+      timeString == 'Tentative' ? timeType = TimeType.tentative : timeString == 'All Day' ? timeType = TimeType.allDay : timeType = TimeType.time;
+      
+      late DateTime date;
+      if(timeType == TimeType.time) {
+        final timeParts = RegExp(r'(\d+):(\d+)(am|pm)').firstMatch(timeString);
+        final hour = int.parse(timeParts!.group(1)!);
+        final minute = int.parse(timeParts.group(2)!);
+        final period = timeParts.group(3)!;
+
+        final hour24 = (period == 'pm' && hour != 12) ? hour + 12 : (period == 'am' && hour == 12) ? 0 : hour;
+        date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, hour24, minute);
+      } else {
+        date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
+      }
 
       newsItemsList.add(NewsItem(
         id: id,
         title: title,
         impact: impact,
+        timeType: timeType,
         date: date,
         currency: currency,
       ));
@@ -104,6 +114,7 @@ class NewsItem {
   final int id;
   final String title;
   final Impact? impact;
+  final TimeType timeType;
   final DateTime date;
   final Currency currency;
 
@@ -111,6 +122,7 @@ class NewsItem {
     required this.id,
     required this.title,
     required this.impact,
+    required this.timeType,
     required this.date,
     required this.currency,
   });
@@ -133,6 +145,7 @@ class NewsItemDetails extends NewsItem {
     required super.id,
     required super.title,
     required super.impact,
+    required super.timeType,
     required super.date,
     required super.currency,
     required this.previous,
@@ -167,4 +180,10 @@ enum UsualEffect {
   higherBad,
   lowerGood,
   lowerBad,
+}
+
+enum TimeType {
+  time,
+  tentative,
+  allDay
 }

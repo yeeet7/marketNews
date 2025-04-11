@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:market_news/services/news_api.dart';
 
 class NewsItemWidget extends StatelessWidget {
-  const NewsItemWidget({required this.impact, required this.title, required this.date, required this.currency, super.key});
+  const NewsItemWidget({required this.impact, required this.title, required this.timeType, required this.date, required this.currency, super.key});
 
   final Impact? impact;
   final String title;
+  final TimeType timeType;
   final DateTime date;
   final Currency currency;
 
@@ -44,7 +45,7 @@ class NewsItemWidget extends StatelessWidget {
               Row(
                 children: [
                   Text('$currencyFlag   ', style: const TextStyle(fontSize: 16)),
-                  Text('${date.hour}:${date.minute.toString().padLeft(2, '0')}',
+                  Text(timeType == TimeType.time ? '${date.hour}:${date.minute.toString().padLeft(2, '0')}' : timeType == TimeType.tentative ? 'Tentative' : 'All Day',
                     style: const TextStyle(
                       fontSize: 16,
                       color: Colors.grey,

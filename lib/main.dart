@@ -38,11 +38,11 @@ class MyApp extends StatelessWidget {
                 return const CircularProgressIndicator();
               }
               if(snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return SingleChildScrollView(child: Text('Error: ${snapshot.error}\n${snapshot.stackTrace}'));
               }
               return SingleChildScrollView(
                 child: Column(
-                  children: snapshot.data!.map((e) => NewsItemWidget(impact: e.impact, title: e.title, date: e.date, currency: e.currency)).toList()
+                  children: snapshot.data!.map((e) => NewsItemWidget(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)).toList()
                 ),
               );
             }
