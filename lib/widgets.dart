@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:market_news/main.dart';
 import 'package:market_news/services/news_api.dart';
 
 class NewsItemWidget extends StatelessWidget {
@@ -22,7 +23,7 @@ class NewsItemWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       width: MediaQuery.of(context).size.width - 32,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(16),
         color: Colors.grey[900],
         border: Border.all(
           color: impactColor,
@@ -70,6 +71,31 @@ class NewsItemWidget extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class TodayDateChip extends StatelessWidget {
+  const TodayDateChip({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      // margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.grey[800]!,
+          width: 1,
+        ),
+      ),
+      child: Text('${DateTime.now().day} ${monthToString(DateTime.now().month)}',
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.grey[800],
+        ),
       ),
     );
   }

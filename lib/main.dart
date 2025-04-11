@@ -16,22 +16,32 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Market News',
       themeMode: ThemeMode.dark,
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData.dark().copyWith(
+        primaryColor: Colors.blue
+      ),
       home: Scaffold(
 
-        appBar: AppBar(
-          leadingWidth: 56 + 16,
-          leading: Text('   ${DateTime.now().day} ${monthToString(DateTime.now().month)}',
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.grey,
-            ),
-          ),
-          backgroundColor: Colors.grey[900],
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(56),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TodayDateChip()
+                  ],
+                ),
+              ),
+            ],
+          )
         ),
       
         body: Center(
           child: FutureBuilder(
+            // future: Future(() {}),
             future: NewsApi.today(),
             builder: (context, snapshot) {
               if(snapshot.connectionState == ConnectionState.waiting) {
@@ -42,7 +52,10 @@ class MyApp extends StatelessWidget {
               }
               return SingleChildScrollView(
                 child: Column(
-                  children: snapshot.data!.map((e) => NewsItemWidget(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)).toList()
+                  children: [
+                    const Padding(padding: EdgeInsets.only(top: 8, left: 8, right: 8), child: Divider(),),
+                    ...snapshot.data!.map((e) => NewsItemWidget(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
+                  ]
                 ),
               );
             }
