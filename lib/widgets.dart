@@ -111,7 +111,7 @@ class _FiltersState extends State<Filters> {
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(55 - 32),
+        borderRadius: BorderRadius.circular(55),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +146,7 @@ class _FiltersState extends State<Filters> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(Currency.values.length ~/ 2, (index) => Flexible(flex: 1, child: Button(Currency.values[index + 3].name.toUpperCase(), filled: _currencies[index + 3], onTap: () {_currencies[index + 3] = !_currencies[index + 3]; setState(() {});}))),
           ),
-          Flexible(flex: 1, child: Button('text: \'High\', isSelected: _high', onTap: () => widget.onApply(_pastEvents, _impacts, _currencies),)),
+          Flexible(flex: 1, child: Button('apply', onTap: () => widget.onApply(_pastEvents, _impacts, _currencies),)),
         ],
       ),
     );
