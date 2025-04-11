@@ -5,11 +5,11 @@ import 'package:market_news/widgets.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(const Main());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Main extends StatelessWidget {
+  const Main({super.key});
 
   // This widget is the root of your application.
   @override
@@ -21,9 +21,29 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.blue,
         colorScheme: const ColorScheme.dark().copyWith(
           primary: Colors.grey.shade700
-        )
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.grey.shade900,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey.shade800,
+          selectedIconTheme: const IconThemeData(color: Colors.blue),
+          unselectedIconTheme: IconThemeData(color: Colors.grey.shade800),
+        ),
       ),
-      home: const App()
+      home: Scaffold(
+        
+        body: const App(),
+        
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 1,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.candlestick_chart_sharp), label: 'Market'),
+            BottomNavigationBarItem(icon: Icon(Icons.calendar_view_day_rounded), label: 'Calendar'),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+          ],
+        ),
+
+      )
     );
   }
 }
