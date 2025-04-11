@@ -74,7 +74,7 @@ class App extends StatelessWidget {
                       await showModalBottomSheet(
                         context: context,
                         backgroundColor: Colors.transparent,
-                        builder: (context) => Filters(onCancel: () => Navigator.pop(context), onApply: (pastEvents, impacts, currencies) {print(pastEvents);})
+                        builder: (context) => Filters(onCancel: () => Navigator.pop(context), onApply: (pastEvents, impacts, currencies) => Navigator.pop(context))
                       );
                     },
                   ),
