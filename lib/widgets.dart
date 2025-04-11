@@ -61,7 +61,7 @@ class NewsItemListTile extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                   color: impactColor.withOpacity(.25),
                   boxShadow: [
                     BoxShadow(
@@ -87,79 +87,6 @@ class NewsItemListTile extends StatelessWidget {
   }
 }
 
-class NewsItemWidget extends StatelessWidget {
-  const NewsItemWidget({required this.impact, required this.title, required this.timeType, required this.date, required this.currency, super.key});
-
-  final Impact? impact;
-  final String title;
-  final TimeType timeType;
-  final DateTime date;
-  final Currency currency;
-
-  @override
-  Widget build(BuildContext context) {
-
-    Color impactColor = impact == Impact.high ? Colors.red : impact == Impact.medium ? Colors.yellow : impact != null ? Colors.green : Colors.grey[800]!;
-    String currencyFlag = currency == Currency.eur ? '🇪🇺' : currency == Currency.usd ? '🇺🇸' : currency == Currency.gbp ? '🇬🇧' : currency == Currency.jpy ? '🇯🇵' : currency == Currency.cad ? '🇨🇦' : currency == Currency.aud ? '🇦🇺' : '';
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      width: MediaQuery.of(context).size.width - 32,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.grey[900],
-        border: Border.all(
-          color: impactColor,
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: impactColor.withOpacity(0.25),
-            blurRadius: 10,
-          ),
-        ]
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Text('$currencyFlag   ', style: const TextStyle(fontSize: 16)),
-                  Text(timeType == TimeType.time ? '${date.hour}:${date.minute.toString().padLeft(2, '0')}' : timeType == TimeType.tentative ? 'Tentative' : 'All Day',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              Text(
-                impact == Impact.high ? 'High' : impact == Impact.medium ? 'Medium' : impact != null ? 'Low' : 'Unknown',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: impactColor,
-                ),
-              ),
-            ],
-          ),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class TodayDateChip extends StatelessWidget {
   const TodayDateChip({super.key});
 
@@ -169,7 +96,7 @@ class TodayDateChip extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       // margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: Colors.grey[800]!,
           width: 1,
@@ -179,6 +106,141 @@ class TodayDateChip extends StatelessWidget {
         style: TextStyle(
           fontSize: 18,
           color: Colors.grey[800],
+        ),
+      ),
+    );
+  }
+}
+
+class Filters extends StatefulWidget {
+  const Filters({super.key});
+
+  @override
+  State<Filters> createState() => _FiltersState();
+}
+
+class _FiltersState extends State<Filters> {
+
+  bool _pastEvents = true;
+
+  bool _low = true;
+  bool _medium = true;
+  bool _high = true;
+
+  final List<bool> _currencies = List.generate(Currency.values.length, (index) => true);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text('  Past Events', style: TextStyle(color: Colors.grey[800], fontSize: 18, fontWeight: FontWeight.bold)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Flexible(flex: 1, child: Button('Show', icon: Icons.remove_red_eye_rounded, filled: _pastEvents, onTap: () => setState(() => _pastEvents = true),)),
+              Flexible(flex: 1, child: Button('Hide', icon: Icons.remove_red_eye_outlined, filled: !_pastEvents, onTap: () => setState(() => _pastEvents = false),)),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text('  Impact Filter', style: TextStyle(color: Colors.grey[800], fontSize: 18, fontWeight: FontWeight.bold)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Flexible(flex: 1, child: Toggle(text: 'Low', color: Colors.green, isSelected: _low, onTap: () {_low = !_low; setState(() {});})),
+              Flexible(flex: 1, child: Toggle(text: 'Medium', color: Colors.orange.shade400, isSelected: _medium, onTap: () {_medium = !_medium; setState(() {});})),
+              Flexible(flex: 1, child: Toggle(text: 'High', color: Colors.red, isSelected: _high, onTap: () {_high = !_high; setState(() {});})),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text('  Currency Filter', style: TextStyle(color: Colors.grey[800], fontSize: 18, fontWeight: FontWeight.bold)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(Currency.values.length ~/ 2, (index) => Flexible(flex: 1, child: Button(Currency.values[index].name.toUpperCase(), filled: _currencies[index], onTap: () {_currencies[index] = !_currencies[index]; setState(() {});}))),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(Currency.values.length ~/ 2, (index) => Flexible(flex: 1, child: Button(Currency.values[index + 3].name.toUpperCase(), filled: _currencies[index + 3], onTap: () {_currencies[index + 3] = !_currencies[index + 3]; setState(() {});}))),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Toggle extends StatelessWidget {
+  const Toggle({required this.text, required this.color, required this.isSelected, this.onTap, super.key});
+
+  final bool isSelected;
+  final Color color;
+  final String text;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: isSelected ? color.withOpacity(.25) : color.withOpacity(0),
+          border: Border.all(
+            color: color,
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: isSelected ? color.withOpacity(0.25) : color.withOpacity(0),
+              blurRadius: 10,
+              spreadRadius: 3,
+            ),
+          ]
+        ),
+        child: Center(child: Text(text, style: TextStyle(color: color)))
+      ),
+    );
+  }
+}
+
+class Button extends StatelessWidget {
+  const Button(this.text, {this.icon, this.filled = true, this.onTap, super.key});
+
+  final bool filled;
+  final String text;
+  final IconData? icon;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: filled ? Theme.of(context).primaryColor.withOpacity(.25) : Theme.of(context).primaryColor.withOpacity(0),
+          border: filled ? null : Border.all(
+            color: Theme.of(context).colorScheme.primary,
+            strokeAlign: BorderSide.strokeAlignInside,
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if(icon != null) Icon(icon!, color: filled ? Theme.of(context).primaryColor : Theme.of(context).colorScheme.primary),
+            if(icon != null) const SizedBox(width: 8),
+            Text(text, style: TextStyle(color: filled ? Theme.of(context).primaryColor : Theme.of(context).colorScheme.primary, fontSize: 18, fontWeight: FontWeight.bold)),
+          ],
         ),
       ),
     );

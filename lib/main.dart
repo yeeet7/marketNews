@@ -17,7 +17,10 @@ class MyApp extends StatelessWidget {
       title: 'Market News',
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark().copyWith(
-        primaryColor: Colors.blue
+        primaryColor: Colors.blue,
+        colorScheme: const ColorScheme.dark().copyWith(
+          primary: Colors.grey.shade700
+        )
       ),
       home: Scaffold(
 
@@ -52,7 +55,17 @@ class MyApp extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),                ]
+                  ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 32,
+                    height: MediaQuery.of(context).size.width - 32,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(55 - 32),
+                      border: Border.all(color: Colors.grey.shade800, width: 1.5)
+                    ),
+                    child: const Filters()
+                  )
+                ]
               ),
             );
           }
