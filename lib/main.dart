@@ -39,27 +39,25 @@ class MyApp extends StatelessWidget {
           )
         ),
       
-        body: Center(
-          child: FutureBuilder(
-            // future: Future(() {}),
-            future: NewsApi.today(),
-            builder: (context, snapshot) {
-              if(snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              }
-              if(snapshot.hasError) {
-                return SingleChildScrollView(child: Text('Error: ${snapshot.error}\n${snapshot.stackTrace}'));
-              }
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const Padding(padding: EdgeInsets.only(top: 8, left: 8, right: 8), child: Divider(),),
-                    ...snapshot.data!.map((e) => NewsItemWidget(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
-                  ]
-                ),
-              );
+        body: FutureBuilder(
+          // future: Future(() => [NewsItem(id: 1, title: 'Test', impact: Impact.high, timeType: TimeType.time, date: DateTime.now(), currency: Currency.eur)]),
+          future: NewsApi.today(),
+          builder: (context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
             }
-          )
+            if(snapshot.hasError) {
+              return SingleChildScrollView(child: Text('Error: ${snapshot.error}\n${snapshot.stackTrace}'));
+            }
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  const Padding(padding: EdgeInsets.only(top: 8, left: 8, right: 8), child: Divider(),),
+                  ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
+                ]
+              ),
+            );
+          }
         ),
       
       ),
