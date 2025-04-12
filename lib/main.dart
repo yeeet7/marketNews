@@ -43,36 +43,28 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56 + 12 + textToSize('${dayToString(DateTime.now().weekday)} - ${DateTime.now().day} ${monthToString(DateTime.now().month)} ${DateTime.now().year}', null).height + 12 + 1),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Button('${DateTime.now().day} ${monthToString(DateTime.now().month)}', filled: false),
-                  Button(
-                    'Filters',
-                    icon: Icons.tune,
-                    filled: false,
-                    onTap: () async {
-                      await showModalBottomSheet(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) => Filters(onCancel: () => Navigator.pop(context), onApply: (pastEvents, impacts, currencies) => Navigator.pop(context))
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            DateText(DateTime.now(), true),
-            Container(width: MediaQuery.of(context).size.width, height: 1, color: Theme.of(context).colorScheme.primary,)
-          ],
-        )
+
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+
+        actions: [
+          Button(
+            'Filters',
+            icon: Icons.tune,
+            filled: false,
+            onTap: () async {
+              await showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => Filters(onCancel: () => Navigator.pop(context), onApply: (pastEvents, impacts, currencies) => Navigator.pop(context))
+              );
+            },
+          ),
+        ],
+
+        bottom: const AppBarBottom(),
+
       ),
     
       body: FutureBuilder(

@@ -262,6 +262,25 @@ class DateText extends StatelessWidget {
   }
 }
 
+class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
+  const AppBarBottom({super.key});
+
+  @override
+  Size get preferredSize => Size.fromHeight(textToSize('${dayToString(DateTime.now().weekday)} - ${DateTime.now().day} ${monthToString(DateTime.now().month)} ${DateTime.now().year}', null).height + 26);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(width: MediaQuery.of(context).size.width, height: 1, color: Theme.of(context).colorScheme.primary),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [DateText(DateTime.now(), true)]),
+        Container(width: MediaQuery.of(context).size.width, height: 1, color: Theme.of(context).colorScheme.primary),
+      ],
+    );
+  }
+}
+
 Size textToSize(String text, TextStyle? style) {
   final TextPainter textPainter = TextPainter(
     text: TextSpan(text: text, style: style),
