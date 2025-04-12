@@ -18,9 +18,10 @@ class Main extends StatelessWidget {
       title: 'Market News',
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xFF17181c),
         primaryColor: Colors.blue,
         colorScheme: const ColorScheme.dark().copyWith(
-          primary: Colors.grey.shade700
+          primary: const Color(0xFF28292d)
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           backgroundColor: Colors.grey.shade900,
@@ -54,7 +55,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56 + 16),
         child: Column(
@@ -99,16 +99,25 @@ class App extends StatelessWidget {
             child: Column(
               children: [
                 DateText(DateTime.now(), true),
-                ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
-                // Container(
-                //   width: MediaQuery.of(context).size.width - 32,
-                //   height: MediaQuery.of(context).size.width - 32,
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(55 - 32),
-                //     border: Border.all(color: Colors.grey.shade800, width: 1.5)
+                // ...List.generate(24, (index) => Container(
+                //   width: MediaQuery.of(context).size.width,
+                //   decoration: const BoxDecoration(
+                //     border: Border(
+                //       bottom: BorderSide(color: Colors.grey, width: .5),
+                //       top: BorderSide(color: Colors.grey, width: .5),
+                //     )
                 //   ),
-                //   child: const Filters()
-                // )
+                //   child: Row (
+                //     children: [
+                //       Padding(
+                //         padding: const EdgeInsets.all(16),
+                //         child: Text('$index:00', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                //       ),
+                      
+                //     ],
+                //   )
+                // )),
+                ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
               ]
             ),
           );

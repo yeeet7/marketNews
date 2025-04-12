@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:market_news/main.dart';
 import 'package:market_news/services/news_api.dart';
@@ -18,72 +19,75 @@ class NewsItemListTile extends StatelessWidget {
     Color impactColor = impact == Impact.high ? Colors.red : impact == Impact.medium ? Colors.orange.shade400 : impact != null ? Colors.green : Colors.grey[800]!;
     String currencyFlag = currency == Currency.eur ? '🇪🇺' : currency == Currency.usd ? '🇺🇸' : currency == Currency.gbp ? '🇬🇧' : currency == Currency.jpy ? '🇯🇵' : currency == Currency.cad ? '🇨🇦' : currency == Currency.aud ? '🇦🇺' : '';
 
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        border: Border.symmetric(
-          horizontal  : BorderSide(color: Theme.of(context).colorScheme.primary, width: .125)
-        )
-      ),
-      // color: Colors.red.withOpacity(0.25),
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Flexible(
-            flex: 3,
-            fit: FlexFit.tight,
-            child: Center(
-              child: Text(timeType == TimeType.time ? '${date.hour}:${date.minute.toString().padLeft(2, '0')}' : timeType == TimeType.tentative ? 'Tentative' : 'All Day',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: DateTime.now().isAfter(date) ? Colors.grey[800] : Colors.grey.shade400,
-                ),
-              ),
-            ),
-          ),
-          Flexible(flex: 3, fit: FlexFit.tight, child: Center(child: Text('$currencyFlag ${currency.name.toUpperCase()}', style: const TextStyle(fontSize: 16)))),
-          Flexible(
-            flex: 7,
-            fit: FlexFit.tight,
-            child: Text(
-              title,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Flexible(
-            flex: 5,
-            fit: FlexFit.tight,
-            child: Center(
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: impactColor.withOpacity(.25),
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 10,
-                      spreadRadius: 3,
-                      color: impactColor.withOpacity(.25),
-                    )
-                  ]
-                ),
-                child: Text(
-                  impact == Impact.high ? 'High' : impact == Impact.medium ? 'Medium' : impact != null ? 'Low' : 'Unknown',
+    return GestureDetector(
+      onTap: () => showCupertinoSheet(context: context, pageBuilder: (context) => Scaffold(body: Center(child: Button('done', onTap: () => Navigator.of(context, rootNavigator: true).pop(),),)),),
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          border: Border.symmetric(
+            horizontal  : BorderSide(color: Theme.of(context).colorScheme.primary, width: .125)
+          )
+        ),
+        // color: Colors.red.withOpacity(0.25),
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Flexible(
+              flex: 3,
+              fit: FlexFit.tight,
+              child: Center(
+                child: Text(timeType == TimeType.time ? '${date.hour}:${date.minute.toString().padLeft(2, '0')}' : timeType == TimeType.tentative ? 'Tentative' : 'All Day',
                   style: TextStyle(
                     fontSize: 16,
-                    color: impactColor,
+                    color: DateTime.now().isAfter(date) ? Colors.grey[800] : Colors.grey.shade400,
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+            Flexible(flex: 3, fit: FlexFit.tight, child: Center(child: Text('$currencyFlag ${currency.name.toUpperCase()}', style: const TextStyle(fontSize: 16)))),
+            Flexible(
+              flex: 7,
+              fit: FlexFit.tight,
+              child: Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 5,
+              fit: FlexFit.tight,
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: impactColor.withValues(alpha: .25),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 10,
+                        spreadRadius: 3,
+                        color: impactColor.withValues(alpha: .25),
+                      )
+                    ]
+                  ),
+                  child: Text(
+                    impact == Impact.high ? 'High' : impact == Impact.medium ? 'Medium' : impact != null ? 'Low' : 'Unknown',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: impactColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -178,14 +182,14 @@ class Toggle extends StatelessWidget {
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: isSelected ? color.withOpacity(.25) : color.withOpacity(0),
+          color: isSelected ? color.withValues(alpha: .25) : color.withValues(alpha: 0),
           border: Border.all(
             color: color,
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: isSelected ? color.withOpacity(0.25) : color.withOpacity(0),
+              color: isSelected ? color.withValues(alpha: .25) : color.withValues(alpha: 0),
               blurRadius: 10,
               spreadRadius: 3,
             ),
@@ -215,9 +219,9 @@ class Button extends StatelessWidget {
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: filled ? Theme.of(context).primaryColor.withOpacity(.25) : Theme.of(context).primaryColor.withOpacity(0),
+          color: filled ? Theme.of(context).primaryColor.withValues(alpha: .25) : Theme.of(context).primaryColor.withValues(alpha: 0),
           border: Border.all(
-            color: filled ? Theme.of(context).colorScheme.primary.withOpacity(0) : Theme.of(context).colorScheme.primary,
+            color: filled ? Theme.of(context).colorScheme.primary.withValues(alpha: 0) : Theme.of(context).colorScheme.primary,
             strokeAlign: BorderSide.strokeAlignInside,
             width: 1,
           ),
@@ -248,7 +252,7 @@ class DateText extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: highlight ? Theme.of(context).primaryColor.withOpacity(.25) : Theme.of(context).colorScheme.primary.withOpacity(0),
+        color: highlight ? Theme.of(context).primaryColor.withValues(alpha: .25) : Theme.of(context).colorScheme.primary.withValues(alpha: 0),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text('${dayToString(date.weekday)} - ${date.day} ${monthToString(date.month)} ${date.year}',

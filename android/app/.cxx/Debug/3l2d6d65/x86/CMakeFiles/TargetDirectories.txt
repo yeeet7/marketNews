@@ -1,0 +1,2 @@
+C:/Users/Viktor/Desktop/hry/nie hry/vscode/market_news/android/app/.cxx/Debug/3l2d6d65/x86/CMakeFiles/edit_cache.dir
+C:/Users/Viktor/Desktop/hry/nie hry/vscode/market_news/android/app/.cxx/Debug/3l2d6d65/x86/CMakeFiles/rebuild_cache.dir
