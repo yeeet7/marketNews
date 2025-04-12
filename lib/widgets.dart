@@ -29,23 +29,11 @@ class NewsItemListTile extends StatelessWidget {
           )
         ),
         // color: Colors.red.withOpacity(0.25),
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width - (textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Flexible(
-              flex: 3,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Text(timeType == TimeType.time ? '${date.hour}:${date.minute.toString().padLeft(2, '0')}' : timeType == TimeType.tentative ? 'Tentative' : 'All Day',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: DateTime.now().isAfter(date) ? Colors.grey[800] : Colors.grey.shade400,
-                  ),
-                ),
-              ),
-            ),
             Flexible(flex: 3, fit: FlexFit.tight, child: Center(child: Text('$currencyFlag ${currency.name.toUpperCase()}', style: const TextStyle(fontSize: 16)))),
             Flexible(
               flex: 7,
@@ -60,7 +48,7 @@ class NewsItemListTile extends StatelessWidget {
               ),
             ),
             Flexible(
-              flex: 5,
+              flex: 2,
               fit: FlexFit.tight,
               child: Center(
                 child: Container(
@@ -266,7 +254,7 @@ class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
   const AppBarBottom({super.key});
 
   @override
-  Size get preferredSize => Size.fromHeight(textToSize('${dayToString(DateTime.now().weekday)} - ${DateTime.now().day} ${monthToString(DateTime.now().month)} ${DateTime.now().year}', null).height + 26);
+  Size get preferredSize => Size.fromHeight(textToSize('${dayToString(DateTime.now().weekday)} - ${DateTime.now().day} ${monthToString(DateTime.now().month)} ${DateTime.now().year}', null).height + 11+16);
 
   @override
   Widget build(BuildContext context) {
