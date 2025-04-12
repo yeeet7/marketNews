@@ -78,37 +78,10 @@ class App extends StatelessWidget {
             return SingleChildScrollView(child: Text('Error: ${snapshot.error}\n${snapshot.stackTrace}'));
           }
           return SingleChildScrollView(
-            child: Column(
-              children: [
-                // DateText(DateTime.now(), true),
-                ...List.generate(24, (index) => Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      // bottom: BorderSide(color: Colors.grey, width: .5),
-                      top: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
-                    )
-                  ),
-                  child: Row (
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            right: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
-                          )
-                        ),
-                        child: Center(child: Text('$index:00', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12))),
-                      ),
-                    ],
-                  )
-                )),
-                Container(height: .5, width: MediaQuery.of(context).size.width, color: Theme.of(context).colorScheme.primary),
-                ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
-              ]
-            ),
+            child: Calendar([
+              for (var e in snapshot.data!)
+                MapEntry(e.date, e)
+            ]),
           );
         }
       ),
@@ -122,6 +95,50 @@ class App extends StatelessWidget {
         ],
       ),
     
+    );
+  }
+}
+
+class Calendar extends StatelessWidget {
+  const Calendar(
+    this.events, {
+    super.key,
+  });
+
+  final List<MapEntry<DateTime, NewsItem>> events;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // DateText(DateTime.now(), true),
+        ...List.generate(24, (index) => Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            border: Border(
+              // bottom: BorderSide(color: Colors.grey, width: .5),
+              top: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
+            )
+          ),
+          child: Row (
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
+                  )
+                ),
+                child: Center(child: Text('$index:00', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12))),
+              ),
+              ...events.where((event) => event.key.hour == index).map((event) => NewsItemListTile(impact: event.value.impact, title: event.value.title, timeType: event.value.timeType, date: event.value.date, currency: event.value.currency)),
+            ],
+          )
+        )),
+        Container(height: .5, width: MediaQuery.of(context).size.width, color: Theme.of(context).colorScheme.primary),
+      ]
     );
   }
 }
