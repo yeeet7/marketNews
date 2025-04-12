@@ -21,30 +21,18 @@ class Main extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF17181c),
         primaryColor: Colors.blue,
         colorScheme: const ColorScheme.dark().copyWith(
-          primary: const Color(0xFF28292d)
+          primary: const Color(0xFF28292d),
+          secondary: const Color(0xFF1d1e1f),
         ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Colors.grey.shade900,
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Color(0xFF1d1e1f),
           selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey.shade800,
-          selectedIconTheme: const IconThemeData(color: Colors.blue),
-          unselectedIconTheme: IconThemeData(color: Colors.grey.shade800),
+          unselectedItemColor: Color(0xFF28292d),
+          selectedIconTheme: IconThemeData(color: Colors.blue),
+          unselectedIconTheme: IconThemeData(color: Color(0xFF28292d)),
         ),
       ),
-      home: Scaffold(
-        
-        body: const App(),
-        
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 1,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.candlestick_chart_sharp), label: 'Market'),
-            BottomNavigationBarItem(icon: Icon(Icons.calendar_view_day_rounded), label: 'Calendar'),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-          ],
-        ),
-
-      )
+      home: const App(),
     );
   }
 }
@@ -56,12 +44,12 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56 + 16),
+        preferredSize: Size.fromHeight(56 + 12 + textToSize('${dayToString(DateTime.now().weekday)} - ${DateTime.now().day} ${monthToString(DateTime.now().month)} ${DateTime.now().year}', null).height + 12 + 1),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -81,6 +69,8 @@ class App extends StatelessWidget {
                 ],
               ),
             ),
+            DateText(DateTime.now(), true),
+            Container(width: MediaQuery.of(context).size.width, height: 1, color: Theme.of(context).colorScheme.primary,)
           ],
         )
       ),
@@ -98,30 +88,46 @@ class App extends StatelessWidget {
           return SingleChildScrollView(
             child: Column(
               children: [
-                DateText(DateTime.now(), true),
-                // ...List.generate(24, (index) => Container(
-                //   width: MediaQuery.of(context).size.width,
-                //   decoration: const BoxDecoration(
-                //     border: Border(
-                //       bottom: BorderSide(color: Colors.grey, width: .5),
-                //       top: BorderSide(color: Colors.grey, width: .5),
-                //     )
-                //   ),
-                //   child: Row (
-                //     children: [
-                //       Padding(
-                //         padding: const EdgeInsets.all(16),
-                //         child: Text('$index:00', style: const TextStyle(color: Colors.grey, fontSize: 12)),
-                //       ),
-                      
-                //     ],
-                //   )
-                // )),
+                // DateText(DateTime.now(), true),
+                ...List.generate(24, (index) => Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      // bottom: BorderSide(color: Colors.grey, width: .5),
+                      top: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
+                    )
+                  ),
+                  child: Row (
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            right: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
+                          )
+                        ),
+                        child: Center(child: Text('$index:00', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12))),
+                      ),
+                    ],
+                  )
+                )),
+                Container(height: .5, width: MediaQuery.of(context).size.width, color: Theme.of(context).colorScheme.primary),
                 ...snapshot.data!.map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)),
               ]
             ),
           );
         }
+      ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 1,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.candlestick_chart_sharp), label: 'Market'),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_view_day_rounded), label: 'Calendar'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+        ],
       ),
     
     );
