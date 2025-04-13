@@ -20,7 +20,7 @@ class NewsItemListTile extends StatelessWidget {
     String currencyFlag = currency == Currency.eur ? '🇪🇺' : currency == Currency.usd ? '🇺🇸' : currency == Currency.gbp ? '🇬🇧' : currency == Currency.jpy ? '🇯🇵' : currency == Currency.cad ? '🇨🇦' : currency == Currency.aud ? '🇦🇺' : '';
 
     return GestureDetector(
-      onTap: () => showCupertinoSheet(context: context, pageBuilder: (context) => const NewsItemDetails()),
+      onTap: () => showCupertinoSheet(context: context, pageBuilder: (context) => const NewsItemDetailsWidget()),
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -81,8 +81,8 @@ class NewsItemListTile extends StatelessWidget {
   }
 }
 
-class NewsItemDetails extends StatelessWidget {
-  const NewsItemDetails({super.key});
+class NewsItemDetailsWidget extends StatelessWidget {
+  const NewsItemDetailsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
