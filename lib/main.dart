@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:market_news/services/news_api.dart';
 import 'package:market_news/widgets.dart';
@@ -37,8 +39,16 @@ class Main extends StatelessWidget {
   }
 }
 
-class App extends StatelessWidget {
+StreamController<List<NewsItem>> _streamController = StreamController<List<NewsItem>>(onListen: () async => _streamController.add((await NewsApi.today())!));
+
+class App extends StatefulWidget {
   const App({super.key});
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
@@ -67,21 +77,23 @@ class App extends StatelessWidget {
 
       ),
     
-      body: FutureBuilder(
+      body: StreamBuilder(
         // future: Future(() => [NewsItem(id: 1, title: 'Test', impact: Impact.high, timeType: TimeType.time, date: DateTime.now(), currency: Currency.eur)]),
-        future: NewsApi.today(),
+        stream: _streamController.stream,// NewsApi.today(),
         builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+          if(!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator.adaptive());
           }
           if(snapshot.hasError) {
             return SingleChildScrollView(child: Text('Error: ${snapshot.error}\n${snapshot.stackTrace}'));
           }
-          return SingleChildScrollView(
-            child: Calendar([
-              for (var e in snapshot.data!)
-                MapEntry(e.date, e)
-            ]),
+          return RefreshIndicator.adaptive(
+            onRefresh: () async {
+              _streamController.add((await NewsApi.today())!);
+            },
+            child: SingleChildScrollView(
+              child: Calendar(snapshot.data!.map((e) => MapEntry(e.date, e)).toList()),
+            ),
           );
         }
       ),
