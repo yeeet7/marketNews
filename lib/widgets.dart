@@ -20,7 +20,7 @@ class NewsItemListTile extends StatelessWidget {
     String currencyFlag = currency == Currency.eur ? '🇪🇺' : currency == Currency.usd ? '🇺🇸' : currency == Currency.gbp ? '🇬🇧' : currency == Currency.jpy ? '🇯🇵' : currency == Currency.cad ? '🇨🇦' : currency == Currency.aud ? '🇦🇺' : '';
 
     return GestureDetector(
-      onTap: () => showCupertinoSheet(context: context, pageBuilder: (context) => Scaffold(body: Center(child: Button('done', onTap: () => Navigator.of(context, rootNavigator: true).pop(),),)),),
+      onTap: () => showCupertinoSheet(context: context, pageBuilder: (context) => const NewsItemDetails()),
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -77,6 +77,35 @@ class NewsItemListTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class NewsItemDetails extends StatelessWidget {
+  const NewsItemDetails({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CupertinoButton(child: Text('Done', style: TextStyle(color: Theme.of(context).primaryColor)), onPressed: () => Navigator.of(context).pop()),
+              ],
+            ),
+            Divider(color: Theme.of(context).colorScheme.primary)
+          ],
+        )
+      ),
+      // body: Center(
+      //   child: Button('done', onTap: () => Navigator.of(context, rootNavigator: true).pop(),)
+      // )
+
     );
   }
 }

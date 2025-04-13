@@ -100,6 +100,7 @@ class _AppState extends State<App> {
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
+        onTap: (index) => _streamController.add([NewsItem(id: 1, title: 'Test', impact: Impact.high, timeType: TimeType.time, date: DateTime.now(), currency: Currency.eur)]),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.candlestick_chart_sharp), label: 'Market'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_view_day_rounded), label: 'Calendar'),
@@ -143,7 +144,7 @@ class Calendar extends StatelessWidget {
                     right: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
                   )
                 ),
-                child: Center(child: Text('$index:00', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12))),
+                child: Center(child: Text('$index:00', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12, fontWeight: FontWeight.bold))),
               ),
               ...events.where((event) => event.key.hour == index).map((event) => NewsItemListTile(impact: event.value.impact, title: event.value.title, timeType: event.value.timeType, date: event.value.date, currency: event.value.currency)),
             ],
