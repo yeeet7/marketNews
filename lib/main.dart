@@ -87,6 +87,15 @@ class _AppState extends State<App> {
           if(snapshot.hasError) {
             return SingleChildScrollView(child: Text('Error: ${snapshot.error}\n${snapshot.stackTrace}'));
           }
+          if(snapshot.data!.isEmpty) {
+            return Center(child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.show_chart, size: 64, color: Theme.of(context).primaryColor.withValues(alpha: .75)),
+                Text('No events for today', style: TextStyle(color: Theme.of(context).primaryColor.withValues(alpha: .75), fontSize: 20, fontWeight: FontWeight.bold)),
+              ],
+            ));
+          }
           return RefreshIndicator.adaptive(
             onRefresh: () async {
               _streamController.add((await NewsApi.today())!);
