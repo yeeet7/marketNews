@@ -81,24 +81,54 @@ class NewsItemDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-
-      resizeToAvoidBottomInset: false,
-
-      navigationBar: CupertinoNavigationBar(
-        // preferredSize: const Size.fromHeight(44),
-        automaticallyImplyLeading: false,
-        trailing: CupertinoButton(
-          // minSize: 44,
-          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-          child: const Text('Done', style: TextStyle(color: Colors.blue))
+    return Material(
+      child: Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CupertinoButton(
+                  // minSize: 44,
+                  onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                  child: const Text('Done', style: TextStyle(color: Colors.blue))
+                ),
+              ],
+            ),
+            Divider(color: Theme.of(context).colorScheme.primary, height: 0),
+            const Align(alignment: Alignment.topCenter, child: Text('test')),
+          ],
         ),
-        // Divider(color: Theme.of(context).colorScheme.primary, height: 0)
       ),
-
-      child: const Align(alignment: Alignment.topCenter, child: Text('test')),
-      
     );
+
+    // return CupertinoPageScaffold(
+    //   resizeToAvoidBottomInset: false,
+    //   navigationBar: CupertinoNavigationBar(
+    //     // preferredSize: const Size.fromHeight(44),
+    //     automaticallyImplyLeading: false,
+    //   ),
+    //   child: const SafeArea(
+    //     top: false,
+    //     child: SingleChildScrollView(
+    //       child: Column(
+    //         children: [
+    //           SizedBox(height: 400,),
+    //           Align(alignment: Alignment.topCenter, child: Text('test')),
+    //           SizedBox(height: 400,),
+    //           Align(alignment: Alignment.topCenter, child: Text('test')),
+    //           SizedBox(height: 400,),
+    //           Align(alignment: Alignment.topCenter, child: Text('test')),
+    //           SizedBox(height: 400,),
+    //           Align(alignment: Alignment.topCenter, child: Text('test')),
+    //           SizedBox(height: 400,),
+    //           Align(alignment: Alignment.topCenter, child: Text('test')),
+    //         ],
+    //       )
+    //     ),
+    //   ),
+    // );
   }
 }
 
