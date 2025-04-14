@@ -26,7 +26,7 @@ class NewsItemListTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8),
         // color: Colors.red.withOpacity(0.25),
-        width: MediaQuery.of(context).size.width - (textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2),
+        width: MediaQuery.of(context).size.width - (textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2 + 4),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,

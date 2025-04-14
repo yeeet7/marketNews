@@ -149,7 +149,7 @@ class Calendar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2,
+                width: textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2 + 4,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   border: Border(
