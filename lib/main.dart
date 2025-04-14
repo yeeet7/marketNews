@@ -24,7 +24,11 @@ class Main extends StatelessWidget {
         primaryColor: Colors.blue,
         colorScheme: const ColorScheme.dark().copyWith(
           primary: const Color(0xFF4A4A4A),
-          secondary: const Color(0xFF0E0E0E),
+          secondary: const Color(0xFF141414),
+          tertiary: const Color(0xFFA0A0A0)
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF141414),
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Color(0xFF141414),
@@ -153,7 +157,7 @@ class Calendar extends StatelessWidget {
                     right: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
                   )
                 ),
-                child: Center(child: Text('$index:00', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12, fontWeight: FontWeight.bold))),
+                child: Center(child: Text('$index:00', style: TextStyle(color: DateTime.now().hour >= index ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.tertiary, fontSize: 12, fontWeight: FontWeight.bold))),
               ),
               Column(
                 children: events.where((event) => event.key.hour == index).map((event) => NewsItemListTile(impact: event.value.impact, title: event.value.title, timeType: event.value.timeType, date: event.value.date, currency: event.value.currency)).toList(),

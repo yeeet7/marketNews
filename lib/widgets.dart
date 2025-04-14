@@ -102,33 +102,6 @@ class NewsItemDetailsWidget extends StatelessWidget {
         ),
       ),
     );
-
-    // return CupertinoPageScaffold(
-    //   resizeToAvoidBottomInset: false,
-    //   navigationBar: CupertinoNavigationBar(
-    //     // preferredSize: const Size.fromHeight(44),
-    //     automaticallyImplyLeading: false,
-    //   ),
-    //   child: const SafeArea(
-    //     top: false,
-    //     child: SingleChildScrollView(
-    //       child: Column(
-    //         children: [
-    //           SizedBox(height: 400,),
-    //           Align(alignment: Alignment.topCenter, child: Text('test')),
-    //           SizedBox(height: 400,),
-    //           Align(alignment: Alignment.topCenter, child: Text('test')),
-    //           SizedBox(height: 400,),
-    //           Align(alignment: Alignment.topCenter, child: Text('test')),
-    //           SizedBox(height: 400,),
-    //           Align(alignment: Alignment.topCenter, child: Text('test')),
-    //           SizedBox(height: 400,),
-    //           Align(alignment: Alignment.topCenter, child: Text('test')),
-    //         ],
-    //       )
-    //     ),
-    //   ),
-    // );
   }
 }
 
