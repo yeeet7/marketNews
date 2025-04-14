@@ -44,29 +44,27 @@ class NewsItemListTile extends StatelessWidget {
                 ),
               ),
             ),
-            Flexible(
-              flex: 3,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: impactColor.withValues(alpha: .25),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 10,
-                        spreadRadius: 3,
-                        color: impactColor.withValues(alpha: .25),
-                      )
-                    ]
-                  ),
-                  child: Text(
-                    impact == Impact.high ? 'High' : impact == Impact.medium ? 'Medium' : impact != null ? 'Low' : 'Unknown',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: impactColor,
-                    ),
+            Container(
+              alignment: Alignment.center,
+              width: textToSize('Medium', TextStyle(color: impactColor, fontSize: 16)).width + 16,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: impactColor.withValues(alpha: .25),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 10,
+                      spreadRadius: 3,
+                      color: impactColor.withValues(alpha: .25),
+                    )
+                  ]
+                ),
+                child: Text(
+                  impact == Impact.high ? 'High' : impact == Impact.medium ? 'Medium' : impact != null ? 'Low' : 'Unknown',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: impactColor,
                   ),
                 ),
               ),
