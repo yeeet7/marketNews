@@ -155,7 +155,9 @@ class Calendar extends StatelessWidget {
                 ),
                 child: Center(child: Text('$index:00', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12, fontWeight: FontWeight.bold))),
               ),
-              ...events.where((event) => event.key.hour == index).map((event) => NewsItemListTile(impact: event.value.impact, title: event.value.title, timeType: event.value.timeType, date: event.value.date, currency: event.value.currency)),
+              Column(
+                children: events.where((event) => event.key.hour == index).map((event) => NewsItemListTile(impact: event.value.impact, title: event.value.title, timeType: event.value.timeType, date: event.value.date, currency: event.value.currency)).toList(),
+              ),
             ],
           )
         )),

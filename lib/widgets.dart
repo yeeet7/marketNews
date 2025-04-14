@@ -23,11 +23,6 @@ class NewsItemListTile extends StatelessWidget {
       onTap: () => showCupertinoSheet(context: context, pageBuilder: (context) => const NewsItemDetailsWidget()),
       child: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.symmetric(
-            horizontal  : BorderSide(color: Theme.of(context).colorScheme.primary, width: .125)
-          )
-        ),
         // color: Colors.red.withOpacity(0.25),
         width: MediaQuery.of(context).size.width - (textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2),
         child: Row(
@@ -87,6 +82,7 @@ class NewsItemDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       
       body: SingleChildScrollView(
         child: Column(
@@ -95,16 +91,13 @@ class NewsItemDetailsWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                CupertinoButton(child: Text('Done', style: TextStyle(color: Theme.of(context).primaryColor)), onPressed: () => Navigator.of(context).pop()),
+                CupertinoButton(child: Text('Done', style: TextStyle(color: Theme.of(context).primaryColor)), onPressed: () => Navigator.pop(context)),
               ],
             ),
-            Divider(color: Theme.of(context).colorScheme.primary)
+            Divider(color: Theme.of(context).colorScheme.primary, height: 0)
           ],
         )
       ),
-      // body: Center(
-      //   child: Button('done', onTap: () => Navigator.of(context, rootNavigator: true).pop(),)
-      // )
 
     );
   }
