@@ -134,6 +134,10 @@ class Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double biggestSize = 0;
+    for(int i = 0; i < 24; i++) {
+      biggestSize = max(biggestSize, textToSize('$i:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2 + 6);
+    }
     return Column(
       children: [
         // DateText(DateTime.now(), true),
@@ -151,10 +155,6 @@ class Calendar extends StatelessWidget {
             children: [
               Builder(
                 builder: (context) {
-                  double biggestSize = 0;
-                  for(int i = 0; i < 24; i++) {
-                    biggestSize = max(biggestSize, textToSize('${index < 10 ? index + 10 : index}:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2 + 6);
-                  }
                   return Container(
                     width: biggestSize,
                     height: events.where((event) => event.key.hour == index).length.clamp(1, double.infinity) * (textToSize(events.first.value.title, const TextStyle(fontSize: 16)).height + 16*2),
