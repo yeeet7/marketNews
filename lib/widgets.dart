@@ -83,10 +83,9 @@ class NewsItemDetailsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      
-      body: SingleChildScrollView(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(2),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
           children: [
             Align(
               alignment: Alignment.centerRight,
@@ -98,9 +97,9 @@ class NewsItemDetailsWidget extends StatelessWidget {
             ),
             Divider(color: Theme.of(context).colorScheme.primary, height: 0)
           ],
-        )
+        ),
       ),
-
+      
     );
   }
 }
