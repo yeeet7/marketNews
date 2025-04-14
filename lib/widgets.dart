@@ -91,7 +91,11 @@ class NewsItemDetailsWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                CupertinoButton(child: Text('Done', style: TextStyle(color: Theme.of(context).primaryColor)), onPressed: () => Navigator.pop(context)),
+                CupertinoButton(
+                  minSize: 50,
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('Done', style: TextStyle(color: Theme.of(context).primaryColor))
+                ),
               ],
             ),
             Divider(color: Theme.of(context).colorScheme.primary, height: 0)
