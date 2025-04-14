@@ -43,7 +43,7 @@ class NewsItemListTile extends StatelessWidget {
               ),
             ),
             Flexible(
-              flex: 2,
+              flex: 3,
               fit: FlexFit.tight,
               child: Center(
                 child: Container(
