@@ -91,7 +91,7 @@ class NewsItemDetailsWidget extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: CupertinoButton(
                 minSize: 44,
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                 child: const Text('Done', style: TextStyle(color: Colors.blue))
               ),
             ),
