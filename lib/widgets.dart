@@ -88,15 +88,13 @@ class NewsItemDetailsWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CupertinoButton(
-                  minSize: 50,
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('Done', style: TextStyle(color: Theme.of(context).primaryColor))
-                ),
-              ],
+            Align(
+              alignment: Alignment.centerRight,
+              child: CupertinoButton(
+                minSize: 50,
+                onPressed: () => Navigator.pop(context),
+                child: Text('Done', style: TextStyle(color: Theme.of(context).primaryColor))
+              ),
             ),
             Divider(color: Theme.of(context).colorScheme.primary, height: 0)
           ],
