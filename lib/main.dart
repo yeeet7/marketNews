@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:market_news/services/news_api.dart';
 import 'package:market_news/widgets.dart';
@@ -148,17 +149,25 @@ class Calendar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: textToSize('${index < 10 ? index + 10 : index}:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2 + 6,
-                height: events.where((event) => event.key.hour == index).length.clamp(1, double.infinity) * (textToSize(events.first.value.title, const TextStyle(fontSize: 16)).height + 16*2),
-                padding: const EdgeInsets.all(16),
-                alignment: Alignment.topCenter,
-                decoration: BoxDecoration(
-                  border: Border(
-                    right: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
-                  )
-                ),
-                child: Text('$index:00', style: TextStyle(color: DateTime.now().hour >= index ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.tertiary, fontSize: 12, fontWeight: FontWeight.bold)),
+              Builder(
+                builder: (context) {
+                  double biggestSize = 0;
+                  for(int i = 0; i < 24; i++) {
+                    biggestSize = max(biggestSize, textToSize('${index < 10 ? index + 10 : index}:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2 + 6);
+                  }
+                  return Container(
+                    width: biggestSize,
+                    height: events.where((event) => event.key.hour == index).length.clamp(1, double.infinity) * (textToSize(events.first.value.title, const TextStyle(fontSize: 16)).height + 16*2),
+                    padding: const EdgeInsets.all(16),
+                    alignment: Alignment.topCenter,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        right: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
+                      )
+                    ),
+                    child: Text('$index:00', style: TextStyle(color: DateTime.now().hour >= index ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.tertiary, fontSize: 12, fontWeight: FontWeight.bold)),
+                  );
+                }
               ),
               Column(
                 children: events.where((event) => event.key.hour == index).map((event) => NewsItemListTile(impact: event.value.impact, title: event.value.title, timeType: event.value.timeType, date: event.value.date, currency: event.value.currency)).toList(),
