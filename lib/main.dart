@@ -149,7 +149,7 @@ class Calendar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2 + 4,
+                width: textToSize('${index < 10 ? index + 10 : index}:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2 + 6,
                 height: events.where((event) => event.key.hour == index).length.clamp(1, double.infinity) * (textToSize(events.first.value.title, const TextStyle(fontSize: 16)).height + 16*2),
                 padding: const EdgeInsets.all(16),
                 alignment: Alignment.topCenter,
