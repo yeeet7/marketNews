@@ -152,6 +152,7 @@ class Calendar extends StatelessWidget {
                 width: textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2 + 4,
                 height: events.where((event) => event.key.hour == index).length.clamp(1, double.infinity) * (textToSize(events.first.value.title, const TextStyle(fontSize: 16)).height + 16*2),
                 padding: const EdgeInsets.all(16),
+                alignment: Alignment.topCenter,
                 decoration: BoxDecoration(
                   border: Border(
                     right: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
