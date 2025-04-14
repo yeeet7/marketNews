@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:market_news/main.dart';
@@ -274,23 +276,93 @@ class DateText extends StatelessWidget {
   }
 }
 
-class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarBottom({super.key});
+class AppBarBottom extends StatefulWidget implements PreferredSizeWidget {
+  // const AppBarBottom(this.events, {super.key});
+  const AppBarBottom({this.onSizeChanged, super.key});
+  final VoidCallback? onSizeChanged;
+
+  // final List<NewsItem> events;
 
   @override
   Size get preferredSize => Size.fromHeight(textToSize('${dayToString(DateTime.now().weekday)} - ${DateTime.now().day} ${monthToString(DateTime.now().month)} ${DateTime.now().year}', null).height + 11+16);
 
+
+  @override
+  State<AppBarBottom> createState() => _AppBarBottomState();
+}
+
+class _AppBarBottomState extends State<AppBarBottom> {
+
+  final GlobalKey _key = GlobalKey();
+  Size _preferredSize = Size.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    // Measure size after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateSize());
+  }
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Measure size after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateSize());
+  }
+
+  void _updateSize() {
+    if (!mounted) return;
+    final RenderBox? renderBox = _key.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox != null && renderBox.hasSize) {
+      final newSize = renderBox.size;
+      if (newSize != _preferredSize) {
+        setState(() {
+          _preferredSize = newSize;
+        });
+        widget.onSizeChanged?.call();
+      }
+    }
+    log('message$_preferredSize');
+    // Schedule another check in case content changes
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateSize());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(width: MediaQuery.of(context).size.width, height: 1, color: Theme.of(context).colorScheme.primary),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [DateText(DateTime.now(), true)]),
-        Container(width: MediaQuery.of(context).size.width, height: 1, color: Theme.of(context).colorScheme.primary),
-      ],
+    return SingleChildScrollView(
+      key: _key,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(width: MediaQuery.of(context).size.width, height: 1, color: Theme.of(context).colorScheme.primary),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [DateText(DateTime.now(), true)]),
+          // StreamBuilder( //!/FIXME
+          //   stream: todayStreamController.stream,
+          //   builder: (context, snapshot) {
+          //     if(snapshot.data?.where((e) => e.timeType == TimeType.allDay || e.timeType == TimeType.tentative).isEmpty ?? true) return const SizedBox();
+          //     return Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         const Text('All Day', style: TextStyle(color: Colors.grey, fontSize: 12)),
+          //         const SizedBox(width: 8),
+          //         Column(children: snapshot.data!.where((e) => e.timeType == TimeType.allDay).map((e) => NewsItemListTile(impact: e.impact, title: e.title, timeType: e.timeType, date: e.date, currency: e.currency)).toList(),)
+          //         // Icon(Icons.circle, size: 8, color: Theme.of(context).colorScheme.primary.withValues(alpha: .75)),
+          //         // const SizedBox(width: 8),
+          //         // Text('${snapshot.data?.where((e) => e.timeType == TimeType.allDay || e.timeType == TimeType.tentative).length} events', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          //       ],
+          //     );   
+          //   }
+          // ),
+          Container(width: MediaQuery.of(context).size.width, height: 1, color: Theme.of(context).colorScheme.primary),
+        ],
+      ),
     );
   }
+  
+  // Size.fromHeight(textToSize('${dayToString(DateTime.now().weekday)} - ${DateTime.now().day} ${monthToString(DateTime.now().month)} ${DateTime.now().year}', null).height + 11+16);
+  Size get preferredSize => _preferredSize;
+
 }
 
 Size textToSize(String text, TextStyle? style) {

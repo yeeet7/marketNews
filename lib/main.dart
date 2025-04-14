@@ -1,6 +1,5 @@
 
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:market_news/services/news_api.dart';
 import 'package:market_news/widgets.dart';
@@ -43,7 +42,7 @@ class Main extends StatelessWidget {
   }
 }
 
-StreamController<List<NewsItem>> _streamController = StreamController<List<NewsItem>>(onListen: () async => _streamController.add((await NewsApi.today())!));
+StreamController<List<NewsItem>> todayStreamController = StreamController<List<NewsItem>>.broadcast(onListen: () async => todayStreamController.add((await NewsApi.today())!));
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -60,7 +59,6 @@ class _AppState extends State<App> {
 
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
 
         actions: [
           Button(
@@ -77,13 +75,13 @@ class _AppState extends State<App> {
           ),
         ],
 
-        bottom: const AppBarBottom(),
+        bottom: const AppBarBottom()
 
       ),
     
       body: StreamBuilder(
         // future: Future(() => [NewsItem(id: 1, title: 'Test', impact: Impact.high, timeType: TimeType.time, date: DateTime.now(), currency: Currency.eur)]),
-        stream: _streamController.stream,// NewsApi.today(),
+        stream: todayStreamController.stream,// NewsApi.today(),
         builder: (context, snapshot) {
           if(!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator.adaptive());
@@ -102,7 +100,7 @@ class _AppState extends State<App> {
           }
           return RefreshIndicator.adaptive(
             onRefresh: () async {
-              _streamController.add((await NewsApi.today())!);
+              todayStreamController.add((await NewsApi.today())!);
             },
             child: SingleChildScrollView(
               child: Calendar(snapshot.data!.map((e) => MapEntry(e.date, e)).toList()),
@@ -113,7 +111,7 @@ class _AppState extends State<App> {
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
-        onTap: (index) => _streamController.add([NewsItem(id: 1, title: 'Test', impact: Impact.high, timeType: TimeType.time, date: DateTime.now(), currency: Currency.eur)]),
+        onTap: (index) => todayStreamController.add([NewsItem(id: 1, title: 'Test', impact: Impact.high, timeType: TimeType.time, date: DateTime.now(), currency: Currency.eur)]),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.candlestick_chart_sharp), label: 'Market'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_view_day_rounded), label: 'Calendar'),
@@ -148,16 +146,17 @@ class Calendar extends StatelessWidget {
           ),
           child: Row (
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 width: textToSize('24:00', TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12)).width + 16*2,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   border: Border(
                     right: BorderSide(color: Theme.of(context).colorScheme.primary, width: .5),
                   )
                 ),
-                child: Center(child: Text('$index:00', style: TextStyle(color: DateTime.now().hour >= index ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.tertiary, fontSize: 12, fontWeight: FontWeight.bold))),
+                child: Text('$index:00', style: TextStyle(color: DateTime.now().hour >= index ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.tertiary, fontSize: 12, fontWeight: FontWeight.bold)),
               ),
               Column(
                 children: events.where((event) => event.key.hour == index).map((event) => NewsItemListTile(impact: event.value.impact, title: event.value.title, timeType: event.value.timeType, date: event.value.date, currency: event.value.currency)).toList(),
