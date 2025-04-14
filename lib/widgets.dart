@@ -84,21 +84,23 @@ class NewsItemDetailsWidget extends StatelessWidget {
     return Scaffold(
 
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(2),
+        preferredSize: const Size.fromHeight(44),
         child: Column(
           children: [
             Align(
               alignment: Alignment.centerRight,
               child: CupertinoButton(
-                minSize: 50,
+                minSize: 44,
                 onPressed: () => Navigator.pop(context),
-                child: Text('Done', style: TextStyle(color: Theme.of(context).primaryColor))
+                child: const Text('Done', style: TextStyle(color: Colors.blue))
               ),
             ),
             Divider(color: Theme.of(context).colorScheme.primary, height: 0)
           ],
         ),
       ),
+
+      body: const Align(alignment: Alignment.topCenter, child: Text('test')),
       
     );
   }
