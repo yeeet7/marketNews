@@ -94,6 +94,41 @@ abstract class NewsApi {
         date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
       }
 
+      final doubleRegex = RegExp(r'-?[\d.,]+');
+
+      // final double? previous = double.tryParse(doubleRegex.firstMatch(item.find('', selector: 'td.calendar__previous span')?.innerHtml ?? '')?.group(0) ?? '');
+      bool? isGreen;
+      if(item.find('', selector: 'td.calendar__actual span')?.className != null) {
+        isGreen = item.find('', selector: 'td.calendar__actual span')!.className.contains('better') ? true : item.find('', selector: 'td.calendar__actual span')!.className.contains('worse') ? false : null;
+      }
+      final double? forecast = double.tryParse(doubleRegex.firstMatch(item.find('', selector: 'td.calendar__forecast span')?.innerHtml ?? '')?.group(0) ?? '');
+      final double? actual = double.tryParse(doubleRegex.firstMatch(item.find('', selector: 'td.calendar__actual span')?.innerHtml ?? '')?.group(0) ?? '');
+      
+      late UsualEffect? usualEffect;
+      switch (isGreen) {
+        case true:
+          if(actual! > forecast!) {
+            usualEffect = UsualEffect.higherGood;
+          } else if(actual < forecast) {
+            usualEffect = UsualEffect.higherBad;
+          } else {
+            usualEffect = null;
+          }
+          break;
+        case false:
+          if(actual! < forecast!) {
+            usualEffect = UsualEffect.higherGood;
+          } else if(actual > forecast) {
+            usualEffect = UsualEffect.higherBad;
+          } else {
+            usualEffect = null;
+          }
+          break;
+        default:
+          usualEffect = null;
+          break;
+      }
+
       newsItemsList.add(NewsItem(
         id: id,
         title: title,
@@ -101,6 +136,11 @@ abstract class NewsApi {
         timeType: timeType,
         date: date,
         currency: currency,
+        previous: item.find('', selector: 'td.calendar__previous span')?.innerHtml,
+        forecast: item.find('', selector: 'td.calendar__forecast span')?.innerHtml,
+        actual: item.find('', selector: 'td.calendar__actual span')?.innerHtml,
+        usualEffect: usualEffect,
+        //calculate volatility (1-10) based on impact and how much bigger/smaller actual is from forecast
       ));
     }
 
@@ -117,6 +157,10 @@ class NewsItem {
   final TimeType timeType;
   final DateTime date;
   final Currency currency;
+  final String? previous;
+  final String? forecast;
+  final String? actual;
+  final UsualEffect? usualEffect;
 
   NewsItem({
     required this.id,
@@ -125,37 +169,15 @@ class NewsItem {
     required this.timeType,
     required this.date,
     required this.currency,
-  });
-
-  @override
-  String toString() {
-    return 'NewsItem{id: $id, title: $title, impact: $impact, date: $date, currency: $currency}';
-  }
-
-}
-
-class NewsItemDetails extends NewsItem {
-  
-  final double previous;
-  final double forecast;
-  final double actual;
-  final UsualEffect usualEffect;
-
-  NewsItemDetails._({
-    required super.id,
-    required super.title,
-    required super.impact,
-    required super.timeType,
-    required super.date,
-    required super.currency,
     required this.previous,
     required this.forecast,
     required this.actual,
     required this.usualEffect,
   });
 
-  Future<NewsItemDetails?> fetchDetails() async {
-    return null; //TODO//! Placeholder for the actual fetching logic
+  @override
+  String toString() {
+    return 'NewsItem{id: $id, title: $title, impact: $impact, date: $date, currency: $currency}';
   }
 
 }
@@ -178,8 +200,6 @@ enum Impact {
 enum UsualEffect {
   higherGood,
   higherBad,
-  lowerGood,
-  lowerBad,
 }
 
 enum TimeType {

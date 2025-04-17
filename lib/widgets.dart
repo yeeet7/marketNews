@@ -1,28 +1,22 @@
 
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:market_news/main.dart';
 import 'package:market_news/services/news_api.dart';
 
 class NewsItemListTile extends StatelessWidget {
-  const NewsItemListTile({required this.impact, required this.title, required this.timeType, required this.date, required this.currency, super.key});
+  const NewsItemListTile({required this.newsItem, super.key});
 
-  final Impact? impact;
-  final String title;
-  final TimeType timeType;
-  final DateTime date;
-  final Currency currency;
+  final NewsItem newsItem;
 
   @override
   Widget build(BuildContext context) {
     
-    Color impactColor = impact == Impact.high ? Colors.red : impact == Impact.medium ? Colors.orange.shade400 : impact != null ? Colors.green : Colors.grey[800]!;
-    String currencyFlag = currency == Currency.eur ? '🇪🇺' : currency == Currency.usd ? '🇺🇸' : currency == Currency.gbp ? '🇬🇧' : currency == Currency.jpy ? '🇯🇵' : currency == Currency.cad ? '🇨🇦' : currency == Currency.aud ? '🇦🇺' : '';
+    Color impactColor = newsItem.impact == Impact.high ? Colors.red : newsItem.impact == Impact.medium ? Colors.orange.shade400 : newsItem.impact != null ? Colors.green : Colors.grey[800]!;
+    String currencyFlag = newsItem.currency == Currency.eur ? '🇪🇺' : newsItem.currency == Currency.usd ? '🇺🇸' : newsItem.currency == Currency.gbp ? '🇬🇧' : newsItem.currency == Currency.jpy ? '🇯🇵' : newsItem.currency == Currency.cad ? '🇨🇦' : newsItem.currency == Currency.aud ? '🇦🇺' : '';
 
     return GestureDetector(
-      onTap: () => showCupertinoSheet(context: context, pageBuilder: (context) => const NewsItemDetailsWidget()),
+      onTap: () => showCupertinoSheet(context: context, pageBuilder: (context) => NewsItemDetailsWidget(newsItem)),
       child: Container(
         padding: const EdgeInsets.all(8),
         // color: Colors.red.withOpacity(0.25),
@@ -31,12 +25,12 @@ class NewsItemListTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Flexible(flex: 3, fit: FlexFit.tight, child: Center(child: Text('$currencyFlag ${currency.name.toUpperCase()}', style: const TextStyle(fontSize: 16)))),
+            Flexible(flex: 3, fit: FlexFit.tight, child: Center(child: Text('$currencyFlag ${newsItem.currency.name.toUpperCase()}', style: const TextStyle(fontSize: 16)))),
             Flexible(
               flex: 7,
               fit: FlexFit.tight,
               child: Text(
-                title,
+                newsItem.title,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 18,
@@ -61,7 +55,7 @@ class NewsItemListTile extends StatelessWidget {
                   ]
                 ),
                 child: Text(
-                  impact == Impact.high ? 'High' : impact == Impact.medium ? 'Medium' : impact != null ? 'Low' : 'Unknown',
+                  newsItem.impact == Impact.high ? 'High' : newsItem.impact == Impact.medium ? 'Medium' : newsItem.impact != null ? 'Low' : 'Unknown',
                   style: TextStyle(
                     fontSize: 16,
                     color: impactColor,
@@ -77,7 +71,9 @@ class NewsItemListTile extends StatelessWidget {
 }
 
 class NewsItemDetailsWidget extends StatelessWidget {
-  const NewsItemDetailsWidget({super.key});
+  const NewsItemDetailsWidget(this.newsItem, {super.key});
+
+  final NewsItem newsItem;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +93,9 @@ class NewsItemDetailsWidget extends StatelessWidget {
               ],
             ),
             Divider(color: Theme.of(context).colorScheme.primary, height: 0),
-            const Align(alignment: Alignment.topCenter, child: Text('test')),
+
+            //* body
+            Text("${newsItem.id}\n${newsItem.title}\n${newsItem.impact}\n${newsItem.timeType}\n${newsItem.date}\n${newsItem.currency}\n${newsItem.previous}\n${newsItem.forecast}\n${newsItem.actual}\n${newsItem.usualEffect}",)
           ],
         ),
       ),
@@ -320,7 +318,6 @@ class _AppBarBottomState extends State<AppBarBottom> {
         widget.onSizeChanged?.call();
       }
     }
-    log('message$_preferredSize');
     // Schedule another check in case content changes
     WidgetsBinding.instance.addPostFrameCallback((_) => _updateSize());
   }
