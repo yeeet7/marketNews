@@ -55,7 +55,7 @@ class NewsItemListTile extends StatelessWidget {
                   ]
                 ),
                 child: Text(
-                  newsItem.impact == Impact.high ? 'High' : newsItem.impact == Impact.medium ? 'Medium' : newsItem.impact != null ? 'Low' : 'Unknown',
+                  newsItem.impact == Impact.high ? 'High' : newsItem.impact == Impact.medium ? 'Medium' : newsItem.impact != null ? 'Low' : 'None',
                   style: TextStyle(
                     fontSize: 16,
                     color: impactColor,
@@ -95,7 +95,22 @@ class NewsItemDetailsWidget extends StatelessWidget {
             Divider(color: Theme.of(context).colorScheme.primary, height: 0),
 
             //* body
-            Text("${newsItem.id}\n${newsItem.title}\n${newsItem.impact}\n${newsItem.timeType}\n${newsItem.date}\n${newsItem.currency}\n${newsItem.previous}\n${newsItem.forecast}\n${newsItem.actual}\n${newsItem.usualEffect}",)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor.withValues(alpha: .25),
+                borderRadius: BorderRadius.circular(8),
+              ),
+
+              child: newsItem.date.difference(DateTime.now()).isNegative ? Text('started ${newsItem.date.difference(DateTime.now()).inHours.abs()} hours ago',
+                style: TextStyle(color: Theme.of(context).primaryColor)
+              ) : Text('starts in ${newsItem.date.difference(DateTime.now()).inHours} hours',
+                style: TextStyle(color: Theme.of(context).primaryColor)
+              ),
+            ),
+
+            if(newsItem.usualEffect != null) Box(title: 'Usual effect', description: Text(newsItem.usualEffect == UsualEffect.higherGood ? 'actual > forecast = good' : 'actual < forecast = good'), icon: Icons.trending_up_rounded, color: Colors.purple),
           ],
         ),
       ),
@@ -268,6 +283,43 @@ class DateText extends StatelessWidget {
       child: Text('${dayToString(date.weekday)} - ${date.day} ${monthToString(date.month)} ${date.year}',
         style: highlight ? TextStyle(color: Theme.of(context).primaryColor) : null
       )
+    );
+  }
+}
+
+class Box extends StatelessWidget {
+  const Box({required this.title, required this.description, required this.icon, this.color, super.key});
+
+  final IconData? icon;
+  final String title;
+  final Widget description;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: color?.withValues(alpha: .5) ?? Theme.of(context).colorScheme.primary.withValues(alpha: .5),
+          width: 1,
+        )
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color ?? Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 8),
+              Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),                
+            ],
+          ),
+          const SizedBox(height: 8),
+          description
+        ],
+      ),
     );
   }
 }

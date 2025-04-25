@@ -67,7 +67,7 @@ abstract class NewsApi {
           currency = Currency.cad;
           break;
         default:
-          currency = Currency.eur;
+          currency = Currency.aud;
           break;
       }
 
@@ -79,7 +79,7 @@ abstract class NewsApi {
       late TimeType timeType;
 
       timeString.isEmpty ? timeString = lastDate : lastDate = timeString;
-      timeString == 'Tentative' ? timeType = TimeType.tentative : timeString == 'All Day' ? timeType = TimeType.allDay : timeType = TimeType.time;
+      timeString == 'Tentative' ? timeType = TimeType.tentative : timeString == 'All Day' ? timeType = TimeType.allDay : RegExp(r'(\d+):(\d+)(am|pm)').firstMatch(timeString) != null ? timeType = TimeType.time : timeType = TimeType.unknown;
       
       late DateTime date;
       if(timeType == TimeType.time) {
@@ -205,5 +205,6 @@ enum UsualEffect {
 enum TimeType {
   time,
   tentative,
-  allDay
+  allDay,
+  unknown
 }
