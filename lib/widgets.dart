@@ -13,7 +13,6 @@ class NewsItemListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     
     Color impactColor = newsItem.impact == Impact.high ? Colors.red : newsItem.impact == Impact.medium ? Colors.orange.shade400 : newsItem.impact != null ? Colors.green : Colors.grey[800]!;
-    String currencyFlag = newsItem.currency == Currency.eur ? '🇪🇺' : newsItem.currency == Currency.usd ? '🇺🇸' : newsItem.currency == Currency.gbp ? '🇬🇧' : newsItem.currency == Currency.jpy ? '🇯🇵' : newsItem.currency == Currency.cad ? '🇨🇦' : newsItem.currency == Currency.aud ? '🇦🇺' : '';
 
     return GestureDetector(
       onTap: () => showCupertinoSheet(context: context, pageBuilder: (context) => NewsItemDetailsWidget(newsItem)),
@@ -25,7 +24,7 @@ class NewsItemListTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Flexible(flex: 3, fit: FlexFit.tight, child: Center(child: Text('$currencyFlag ${newsItem.currency.name.toUpperCase()}', style: const TextStyle(fontSize: 16)))),
+            Flexible(flex: 3, fit: FlexFit.tight, child: Center(child: Text('${currencyFlag(newsItem.currency)} ${newsItem.currency.name.toUpperCase()}', style: const TextStyle(fontSize: 16)))),
             Flexible(
               flex: 7,
               fit: FlexFit.tight,
@@ -82,14 +81,22 @@ class NewsItemDetailsWidget extends StatelessWidget {
         color: Theme.of(context).scaffoldBackgroundColor,
         child: Column(
           children: [
+            //* appBar
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text('${currencyFlag(newsItem.currency)} ${newsItem.currency.name.toUpperCase()}'),
+                ),
+
                 CupertinoButton(
                   // minSize: 44,
                   onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                   child: const Text('Done', style: TextStyle(color: Colors.blue))
                 ),
+
               ],
             ),
             Divider(color: Theme.of(context).colorScheme.primary, height: 0),
@@ -110,7 +117,36 @@ class NewsItemDetailsWidget extends StatelessWidget {
               ),
             ),
 
+            //* title
+            Text(
+              newsItem.title,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
             if(newsItem.usualEffect != null) Box(title: 'Usual effect', description: Text(newsItem.usualEffect == UsualEffect.higherGood ? 'actual > forecast = good' : 'actual < forecast = good'), icon: Icons.trending_up_rounded, color: Colors.purple),
+            
+            if([newsItem.forecast, newsItem.actual, newsItem.previous].any((element) => element != null)) Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Box(title: 'Impact', width: MediaQuery.of(context).size.width / 2 - 16*2, description: Text(newsItem.impact?.name ?? 'N/A'), color: newsItem.impact == Impact.high ? Colors.red : newsItem.impact == Impact.medium ? Colors.orange.shade400 : Colors.grey[800]),
+                    Box(title: 'Previous', width: MediaQuery.of(context).size.width / 2 - 16*2, description: Text(newsItem.previous?.toString() ?? 'N/A'), color: Colors.grey[800]),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Box(title: 'Forecast', width: MediaQuery.of(context).size.width / 2 - 16*2, description: Text(newsItem.forecast?.toString() ?? 'N/A'), color: Colors.green),
+                    Box(title: 'Actual', width: MediaQuery.of(context).size.width / 2 - 16*2, description: Text(newsItem.actual?.toString() ?? 'N/A'), color: Colors.red),
+                  ],
+                )
+              ],
+            )
           ],
         ),
       ),
@@ -288,16 +324,18 @@ class DateText extends StatelessWidget {
 }
 
 class Box extends StatelessWidget {
-  const Box({required this.title, required this.description, required this.icon, this.color, super.key});
+  const Box({required this.title, required this.description, this.icon, this.color, this.width, super.key});
 
   final IconData? icon;
   final String title;
   final Widget description;
   final Color? color;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -311,7 +349,7 @@ class Box extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: color ?? Theme.of(context).colorScheme.primary),
+              if(icon != null) Icon(icon, color: color ?? Theme.of(context).colorScheme.primary),
               const SizedBox(width: 8),
               Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),                
             ],
@@ -420,3 +458,5 @@ Size textToSize(String text, TextStyle? style) {
   )..layout();
   return textPainter.size;
 }
+
+String currencyFlag(currency) => currency == Currency.eur ? '🇪🇺' : currency == Currency.usd ? '🇺🇸' : currency == Currency.gbp ? '🇬🇧' : currency == Currency.jpy ? '🇯🇵' : currency == Currency.cad ? '🇨🇦' : currency == Currency.aud ? '🇦🇺' : '';

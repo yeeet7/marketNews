@@ -112,7 +112,7 @@ class _AppState extends State<App> {
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
-        onTap: (index) => todayStreamController.add([NewsItem(id: 1, title: 'Test', impact: Impact.high, timeType: TimeType.time, date: DateTime.now(), currency: Currency.eur, previous: "1", forecast: "2", actual: "3", usualEffect: null)]),
+        onTap: (index) => todayStreamController.add([NewsItem(id: 1, title: 'Test', impact: Impact.high, timeType: TimeType.time, date: DateTime.now(), currency: Currency.eur, previous: "1", forecast: "2", actual: "3", usualEffect: UsualEffect.higherGood)]),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.candlestick_chart_sharp), label: 'Market'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_view_day_rounded), label: 'Calendar'),
